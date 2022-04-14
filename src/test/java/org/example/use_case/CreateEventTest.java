@@ -37,9 +37,13 @@ class CreateEventTest {
                 "location1",
                 "");
 
-        var expected = new Event(LocalDate.of(2011, 12, 12),
+        var expected = new Event(0L, LocalDate.of(2011, 12, 12),
                 "location1",
-                "");
+                "",
+                false,
+                null,
+                null
+        );
 
         assertThat(result).isEqualTo(expected);
     }

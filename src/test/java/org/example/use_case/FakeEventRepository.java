@@ -4,26 +4,33 @@ import org.example.model.Event;
 import org.example.model.EventRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FakeEventRepository implements EventRepository {
-    private final List<Event> events = List.of(
-            new Event(
-                    1L,
-                    LocalDate.of(2012, 12, 12),
-                    "location1",
-                    "description1",
-                    false,
-                    List.of(1L),
-                    List.of(1L)
-            )
-    );
+    private List<Event> events = new ArrayList<>();
 
-    @Override
-    public List<Event> findAll() {
-        return events;
+    public FakeEventRepository() {
+        this.events.add(new Event(
+                1L,
+                LocalDate.of(2012, 12, 12),
+                "location1",
+                "description1",
+                false,
+                new ArrayList<>(List.of(1L)),
+                new ArrayList<>(List.of(1L))
+        ));
+        this.events.add(new Event(
+                2L,
+                LocalDate.of(2012, 12, 12),
+                "location2",
+                "description1",
+                false,
+                new ArrayList<>(List.of(2L)),
+                new ArrayList<>(List.of(2L))
+        ));
     }
 
     @Override
@@ -47,9 +54,20 @@ public class FakeEventRepository implements EventRepository {
     }
 
     @Override
-    public List<Event> findAllEventByAdminId(Long adminId) {
+    public List<Event> findAllByDate(LocalDate date) {
         return events.stream()
-                .filter(event -> event.getAdminsIds().contains(adminId))
+                .filter(event -> event.getDate().equals(date))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void save(Event event) {
+        events.removeIf(currentEvent -> currentEvent.getId().equals(event.getId()));
+
+        events.add(event);
+    }
+
+    public List<Event> getEvents() {
+        return events;
     }
 }

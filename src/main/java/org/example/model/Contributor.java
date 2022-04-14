@@ -3,16 +3,22 @@ package org.example.model;
 import java.util.Objects;
 
 public class Contributor {
+    private Long id;
     private String firstName;
     private String lastName;
     private String organization;
-    private String role;
+    private Role role;
 
-    public Contributor(String firstName, String lastName, String organization, String carName) {
+    public Contributor(Long id, String firstName, String lastName, String organization, Role role) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.organization = organization;
-        this.role = carName;
+        this.role = role;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getFirstName() {
@@ -27,7 +33,7 @@ public class Contributor {
         return organization;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
@@ -35,12 +41,12 @@ public class Contributor {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Contributor driver = (Contributor) o;
-        return Objects.equals(firstName, driver.firstName) && Objects.equals(lastName, driver.lastName) && Objects.equals(organization, driver.organization) && Objects.equals(role, driver.role);
+        Contributor that = (Contributor) o;
+        return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(organization, that.organization) && role == that.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, organization, role);
+        return Objects.hash(id, firstName, lastName, organization, role);
     }
 }

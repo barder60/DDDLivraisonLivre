@@ -6,35 +6,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class Event {
-    private Long id = 0L;
-    private LocalDate date;
-    private String location;
-    private String description;
-    private boolean confirmed;
-    private List<Long> adminsIds;
-    private List<Long> contributorsIds;
-
-    public Event(Long id, LocalDate date, String location, String description) {
-        this.id = id;
-        this.date = date;
-        this.location = location;
-        this.description = description;
-        this.confirmed = false;
-    }
-
-    public Event(LocalDate date, String location, String description) {
-        this.date = date;
-        this.location = location;
-        this.description = description;
-        this.confirmed = false;
-    }
-
-    public Event(LocalDate date, String location, String description, boolean confirmed) {
-        this.date = date;
-        this.location = location;
-        this.description = description;
-        this.confirmed = confirmed;
-    }
+    private final Long id;
+    private final LocalDate date;
+    private final String location;
+    private final String description;
+    private final boolean confirmed;
+    private final List<Long> adminsIds;
+    private final List<Long> contributorsIds;
 
     public Event(Long id, LocalDate date, String location, String description, boolean confirmed, List<Long> adminsIds, List<Long> contributorsIds) {
         this.id = id;

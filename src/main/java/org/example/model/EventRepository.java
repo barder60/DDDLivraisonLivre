@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EventRepository {
-    List<Event>  findAll();
 
     Boolean existsByDateAndLocation(LocalDate date, String location);
 
@@ -13,5 +12,7 @@ public interface EventRepository {
 
     Optional<Event> findById(Long eventId);
 
-    List<Event> findAllEventByAdminId(Long admin);
+    List<Event> findAllByDate(LocalDate date);
+
+    void save(Event event);
 }

@@ -16,7 +16,7 @@ public class CreateEvent {
         if (events.existsByDateAndLocation(date, location)) {
             throw new EventAlreadyExistException();
         }
-        var eventToCreate = new Event(date, location, description);
+        var eventToCreate = new Event(0L, date, location, description, false, null, null);
 
         return events.create(eventToCreate);
     }
