@@ -1,18 +1,23 @@
 package org.example.model;
 
+
 import java.util.Objects;
 
 public class Contributor {
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String organization;
-    private Role role;
+    private final Long id;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
+    private final String password;
+    private final String organization;
+    private final Role role;
 
-    public Contributor(Long id, String firstName, String lastName, String organization, Role role) {
+    public Contributor(Long id, String firstName, String lastName, String email, String password, String organization, Role role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
+        this.password = password;
         this.organization = organization;
         this.role = role;
     }
@@ -29,6 +34,14 @@ public class Contributor {
         return lastName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
     public String getOrganization() {
         return organization;
     }
@@ -42,11 +55,11 @@ public class Contributor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contributor that = (Contributor) o;
-        return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(organization, that.organization) && role == that.role;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, organization, role);
+        return Objects.hash(id);
     }
 }

@@ -1,10 +1,19 @@
 package org.example.use_case;
 
+import org.example.model.Event;
+import org.example.model.EventId;
+import org.example.model.NotificationRepository;
+import org.example.model.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.Mockito.*;
 
 class ConfirmEventTest {
     ConfirmEvent confirmEvent;
@@ -12,15 +21,16 @@ class ConfirmEventTest {
     FakeEventRepository fakeEvents;
     FakeAdminRepository fakeAdmins;
     FakeContributorRepository fakeContributors;
-    FakeNotificationRepository fakeNotificationRepository;
+
+    NotificationRepository mockNotifyRepository;
 
     @BeforeEach
     void setup() {
         fakeEvents = new FakeEventRepository();
         fakeAdmins = new FakeAdminRepository();
         fakeContributors = new FakeContributorRepository();
-        fakeNotificationRepository = new FakeNotificationRepository();
-        confirmEvent = new ConfirmEvent(fakeEvents, fakeAdmins, fakeContributors, fakeNotificationRepository);
+        mockNotifyRepository = mock(NotificationRepository.class);
+        confirmEvent = new ConfirmEvent(fakeEvents, fakeAdmins, fakeContributors, mockNotifyRepository);
     }
 
     @Test
@@ -67,18 +77,33 @@ class ConfirmEventTest {
     void when_event_confirmed_should_notify_admins_link_to_event() {
         confirmEvent.confirm(1L);
 
-        var adminEmailMap = fakeNotificationRepository.getAdminEmailEventMap();
-
-        assertThat(adminEmailMap.size()).isEqualTo(1);
-        var maybeEvent = fakeEvents.findById(1L);
-        assertThat(maybeEvent).isNotEmpty();
-        var concernedEvent = maybeEvent.get();
-        var adminsId = concernedEvent.getAdminsIds();
-        var admins = fakeAdmins.findAllByIds(adminsId);
-        admins.forEach(admin -> {
-            var expectedEvent = adminEmailMap.get(admin.getEmail());
-            assertThat(expectedEvent).isEqualTo(concernedEvent);
-        });
+        var expectedEvent = new Event(
+                new EventId(1L),
+                LocalDate.of(2012, 12, 12),
+                "location1",
+                "description1",
+                false,
+                new ArrayList<>(List.of(1L)),
+                new ArrayList<>(List.of(1L))
+        );
+        verify(mockNotifyRepository, times(1))
+                .notifyAdmin("admin@email.com", expectedEvent);
     }
 
+    @Test
+    void when_event_confirmed_should_notify_contributor_with_role_link_to_event() {
+        confirmEvent.confirm(1L);
+
+        var expectedEvent = new Event(
+                new EventId(1L),
+                LocalDate.of(2012, 12, 12),
+                "location1",
+                "description1",
+                false,
+                new ArrayList<>(List.of(1L)),
+                new ArrayList<>(List.of(1L))
+        );
+        verify(mockNotifyRepository, times(1))
+                .notifyContributor("contri@butor.com", Role.DRIVER, expectedEvent);
+    }
 }

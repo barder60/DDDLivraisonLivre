@@ -26,11 +26,13 @@ public class ConfirmEvent {
                 .orElseThrow(EventNotFoundException::new);
         var sameDayEvents = eventRepository.findAllByDate(event.getDate());
         var admins = adminRepository.findAllByIds(event.getAdminsIds());
+        var contributors = contributorRepository.findAllByIds(event.getContributorsIds());
 
         Event confirmedEvent = confirmEvent(event, sameDayEvents);
 
         eventRepository.save(confirmedEvent);
-        admins.forEach(admin -> notificationRepository.notifyAdmin(admin.getEmail(), confirmedEvent));
+        notifyAdminsAboutConfirmedEvent(admins, confirmedEvent);
+        notifyContributorsAboutConfirmedEvent(contributors, confirmedEvent);
     }
 
     private Event confirmEvent(Event event, List<Event> sameDayEvents) {
@@ -58,6 +60,25 @@ public class ConfirmEvent {
                 true,
                 event.getAdminsIds(),
                 event.getContributorsIds()
+        );
+    }
+
+    private void notifyAdminsAboutConfirmedEvent(List<Admin> admins, Event confirmedEvent) {
+        admins.forEach(admin ->
+                notificationRepository.notifyAdmin(
+                        admin.getEmail(),
+                        confirmedEvent
+                )
+        );
+    }
+
+    private void notifyContributorsAboutConfirmedEvent(List<Contributor> contributors, Event confirmedEvent) {
+        contributors.forEach(contributor ->
+                notificationRepository.notifyContributor(
+                        contributor.getEmail(),
+                        contributor.getRole(),
+                        confirmedEvent
+                )
         );
     }
 }

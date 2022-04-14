@@ -13,6 +13,8 @@ public class FakeContributorRepository implements ContributorRepository {
                     1L,
                     "firstcontri",
                     "lastcontri",
+                    "contri@butor.com",
+                    "contripassword",
                     "organization",
                     Role.DRIVER
             )
