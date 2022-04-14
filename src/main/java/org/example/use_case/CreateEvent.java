@@ -1,14 +1,14 @@
 package org.example.use_case;
 
 import org.example.model.Event;
-import org.example.model.Events;
+import org.example.model.EventRepository;
 
 import java.time.LocalDate;
 
 public class CreateEvent {
-    private final Events events;
+    private final EventRepository events;
 
-    public CreateEvent(Events events) {
+    public CreateEvent(EventRepository events) {
         this.events = events;
     }
 
