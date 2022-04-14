@@ -1,6 +1,7 @@
 package org.example.use_case;
 
 import org.example.model.Event;
+import org.example.model.EventId;
 import org.example.model.EventRepository;
 
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ public class FakeEventRepository implements EventRepository {
 
     public FakeEventRepository() {
         this.events.add(new Event(
-                1L,
+                new EventId(1L),
                 LocalDate.of(2012, 12, 12),
                 "location1",
                 "description1",
@@ -23,7 +24,7 @@ public class FakeEventRepository implements EventRepository {
                 new ArrayList<>(List.of(1L))
         ));
         this.events.add(new Event(
-                2L,
+                new EventId(2L),
                 LocalDate.of(2012, 12, 12),
                 "location2",
                 "description1",
@@ -49,7 +50,7 @@ public class FakeEventRepository implements EventRepository {
     @Override
     public Optional<Event> findById(Long eventId) {
         return events.stream().filter(
-                event -> event.getId().equals(eventId)
+                event -> event.getEventId().equals(new EventId(eventId))
         ).findFirst();
     }
 
@@ -62,7 +63,7 @@ public class FakeEventRepository implements EventRepository {
 
     @Override
     public void save(Event event) {
-        events.removeIf(currentEvent -> currentEvent.getId().equals(event.getId()));
+        events.removeIf(currentEvent -> currentEvent.getEventId().equals(event.getEventId()));
 
         events.add(event);
     }

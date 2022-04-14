@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Event {
-    private final Long id;
+    private final EventId eventId;
     private final LocalDate date;
     private final String location;
     private final String description;
@@ -14,8 +14,8 @@ public class Event {
     private final List<Long> adminsIds;
     private final List<Long> contributorsIds;
 
-    public Event(Long id, LocalDate date, String location, String description, boolean confirmed, List<Long> adminsIds, List<Long> contributorsIds) {
-        this.id = id;
+    public Event(EventId id, LocalDate date, String location, String description, boolean confirmed, List<Long> adminsIds, List<Long> contributorsIds) {
+        this.eventId = id;
         this.date = date;
         this.location = location;
         this.description = description;
@@ -24,8 +24,8 @@ public class Event {
         this.contributorsIds = contributorsIds;
     }
 
-    public Long getId() {
-        return id;
+    public EventId getEventId() {
+        return eventId;
     }
 
     public LocalDate getDate() {
@@ -65,11 +65,11 @@ public class Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return Objects.equals(date, event.date) && Objects.equals(location, event.location) && Objects.equals(description, event.description);
+        return Objects.equals(eventId, event.eventId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, location, description);
+        return Objects.hash(eventId);
     }
 }

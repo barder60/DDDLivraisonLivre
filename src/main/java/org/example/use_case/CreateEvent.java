@@ -1,6 +1,7 @@
 package org.example.use_case;
 
 import org.example.model.Event;
+import org.example.model.EventId;
 import org.example.model.EventRepository;
 
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ public class CreateEvent {
         if (events.existsByDateAndLocation(date, location)) {
             throw new EventAlreadyExistException();
         }
-        var eventToCreate = new Event(0L, date, location, description, false, null, null);
+        var eventToCreate = new Event(new EventId(0L), date, location, description, false, null, null);
 
         return events.create(eventToCreate);
     }

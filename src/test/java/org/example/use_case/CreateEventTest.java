@@ -2,6 +2,7 @@ package org.example.use_case;
 
 
 import org.example.model.Event;
+import org.example.model.EventId;
 import org.example.model.EventRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ class CreateEventTest {
                 "location1",
                 "");
 
-        var expected = new Event(0L, LocalDate.of(2011, 12, 12),
+        var expected = new Event(new EventId(0L), LocalDate.of(2011, 12, 12),
                 "location1",
                 "",
                 false,

@@ -1,9 +1,6 @@
 package org.example.use_case;
 
-import org.example.model.AdminRepository;
-import org.example.model.ContributorRepository;
-import org.example.model.Event;
-import org.example.model.EventRepository;
+import org.example.model.*;
 
 import java.util.List;
 
@@ -50,7 +47,7 @@ public class ConfirmEvent {
 
     private Event createConfirmedEvent(Event event) {
         return new Event(
-                event.getId(),
+                new EventId(event.getEventId().getId()),
                 event.getDate(),
                 event.getLocation(),
                 event.getDescription(),
