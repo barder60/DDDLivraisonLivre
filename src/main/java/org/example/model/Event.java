@@ -36,6 +36,16 @@ public class Event {
         this.confirmed = confirmed;
     }
 
+    public Event(Long id, LocalDate date, String location, String description, boolean confirmed, List<Long> adminsIds, List<Long> contributorsIds) {
+        this.id = id;
+        this.date = date;
+        this.location = location;
+        this.description = description;
+        this.confirmed = confirmed;
+        this.adminsIds = adminsIds;
+        this.contributorsIds = contributorsIds;
+    }
+
     public Long getId() {
         return id;
     }

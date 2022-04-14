@@ -6,6 +6,7 @@ import org.example.model.EventRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class FakeEventRepository implements EventRepository {
     private final List<Event> events = List.of(
@@ -13,7 +14,10 @@ public class FakeEventRepository implements EventRepository {
                     1L,
                     LocalDate.of(2012, 12, 12),
                     "location1",
-                    "description1"
+                    "description1",
+                    false,
+                    List.of(1L),
+                    List.of(1L)
             )
     );
 
@@ -40,5 +44,12 @@ public class FakeEventRepository implements EventRepository {
         return events.stream().filter(
                 event -> event.getId().equals(eventId)
         ).findFirst();
+    }
+
+    @Override
+    public List<Event> findAllEventByAdminId(Long adminId) {
+        return events.stream()
+                .filter(event -> event.getAdminsIds().contains(adminId))
+                .collect(Collectors.toList());
     }
 }

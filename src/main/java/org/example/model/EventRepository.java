@@ -12,4 +12,6 @@ public interface EventRepository {
     Event create(Event event);
 
     Optional<Event> findById(Long eventId);
+
+    List<Event> findAllEventByAdminId(Long admin);
 }
