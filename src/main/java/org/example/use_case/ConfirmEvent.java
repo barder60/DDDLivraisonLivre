@@ -5,7 +5,7 @@ import org.example.model.ContributorRepository;
 import org.example.model.Event;
 import org.example.model.EventRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public class ConfirmEvent {
     private final EventRepository eventRepository;
@@ -25,26 +25,31 @@ public class ConfirmEvent {
     public void confirm(Long eventId) {
         var event = eventRepository.findById(eventId)
                 .orElseThrow(EventNotFoundException::new);
-
-        var adminsIds = event.getAdminsIds();
-        var contributorIds = event.getContributorsIds();
         var sameDayEvents = eventRepository.findAllByDate(event.getDate());
 
+        Event confirmedEvent = confirmEvent(event, sameDayEvents);
+
+        eventRepository.save(confirmedEvent);
+    }
+
+    private Event confirmEvent(Event event, List<Event> sameDayEvents) {
+        var adminsIds = event.getAdminsIds();
         sameDayEvents.stream()
-                .filter(sameDayEvent -> sameDayEvent.getAdminsIds().stream().noneMatch(adminsIds::contains))
+                .filter(sameDayEvent -> sameDayEvent.hasAtLeastOneAdminAlreadyInEvent(adminsIds))
                 .findAny()
                 .orElseThrow(AdminNotAvailableInEventException::new);
 
-        // pareil pour contribut
+        var contributorIds = event.getContributorsIds();
         sameDayEvents.stream()
-                .filter(sameDayEvent -> sameDayEvent.getContributorsIds().stream().noneMatch(contributorIds::contains))
+                .filter(sameDayEvent -> sameDayEvent.hasAtLeastOneContributorAlreadyIn(contributorIds))
                 .findAny()
                 .orElseThrow(ContributorNotAvailableInEventException::new);
 
+        return createConfirmedEvent(event);
+    }
 
-
-        // mettre à jour l'event
-        var confirmedEvent = new Event(
+    private Event createConfirmedEvent(Event event) {
+        return new Event(
                 event.getId(),
                 event.getDate(),
                 event.getLocation(),
@@ -53,6 +58,5 @@ public class ConfirmEvent {
                 event.getAdminsIds(),
                 event.getContributorsIds()
         );
-        eventRepository.save(confirmedEvent);
     }
 }

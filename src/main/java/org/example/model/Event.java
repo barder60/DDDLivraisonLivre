@@ -52,6 +52,14 @@ public class Event {
         return contributorsIds;
     }
 
+    public boolean hasAtLeastOneAdminAlreadyInEvent(List<Long> adminsIdsOtherEvent) {
+        return getAdminsIds().stream().noneMatch(adminsIdsOtherEvent::contains);
+    }
+
+    public boolean hasAtLeastOneContributorAlreadyIn(List<Long> contributorIdsOtherEvent) {
+        return getContributorsIds().stream().noneMatch(contributorIdsOtherEvent::contains);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
