@@ -12,13 +12,15 @@ class ConfirmEventTest {
     FakeEventRepository fakeEvents;
     FakeAdminRepository fakeAdmins;
     FakeContributorRepository fakeContributors;
+    FakeNotificationRepository fakeNotificationRepository;
 
     @BeforeEach
     void setup() {
         fakeEvents = new FakeEventRepository();
         fakeAdmins = new FakeAdminRepository();
         fakeContributors = new FakeContributorRepository();
-        confirmEvent = new ConfirmEvent(fakeEvents, fakeAdmins, fakeContributors);
+        fakeNotificationRepository = new FakeNotificationRepository();
+        confirmEvent = new ConfirmEvent(fakeEvents, fakeAdmins, fakeContributors, fakeNotificationRepository);
     }
 
     @Test
@@ -59,6 +61,24 @@ class ConfirmEventTest {
         var afterConfirmedEvent = fakeEvents.findById(1L);
         assertThat(afterConfirmedEvent.isPresent()).isTrue();
         assertThat(afterConfirmedEvent.get().isConfirmed()).isTrue();
+    }
+
+    @Test
+    void when_event_confirmed_should_notify_admins_link_to_event() {
+        confirmEvent.confirm(1L);
+
+        var adminEmailMap = fakeNotificationRepository.getAdminEmailEventMap();
+
+        assertThat(adminEmailMap.size()).isEqualTo(1);
+        var maybeEvent = fakeEvents.findById(1L);
+        assertThat(maybeEvent).isNotEmpty();
+        var concernedEvent = maybeEvent.get();
+        var adminsId = concernedEvent.getAdminsIds();
+        var admins = fakeAdmins.findAllByIds(adminsId);
+        admins.forEach(admin -> {
+            var expectedEvent = adminEmailMap.get(admin.getEmail());
+            assertThat(expectedEvent).isEqualTo(concernedEvent);
+        });
     }
 
 }
