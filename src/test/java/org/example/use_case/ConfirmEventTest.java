@@ -19,16 +19,16 @@ class ConfirmEventTest {
     ConfirmEvent confirmEvent;
 
     FakeEventRepository fakeEvents;
-    FakeAdminRepository fakeAdmins;
-    FakeContributorRepository fakeContributors;
+    FakeAdminDao fakeAdmins;
+    FakeContributorDao fakeContributors;
 
     NotificationRepository mockNotifyRepository;
 
     @BeforeEach
     void setup() {
         fakeEvents = new FakeEventRepository();
-        fakeAdmins = new FakeAdminRepository();
-        fakeContributors = new FakeContributorRepository();
+        fakeAdmins = new FakeAdminDao();
+        fakeContributors = new FakeContributorDao();
         mockNotifyRepository = mock(NotificationRepository.class);
         confirmEvent = new ConfirmEvent(fakeEvents, fakeAdmins, fakeContributors, mockNotifyRepository);
     }

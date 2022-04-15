@@ -6,18 +6,18 @@ import java.util.List;
 
 public class ConfirmEvent {
     private final EventRepository eventRepository;
-    private final AdminRepository adminRepository;
-    private final ContributorRepository contributorRepository;
+    private final AdminDao adminDao;
+    private final ContributorDao contributorDao;
     private final NotificationRepository notificationRepository;
 
     public ConfirmEvent(
             EventRepository eventRepository,
-            AdminRepository adminRepository,
-            ContributorRepository contributorRepository,
+            AdminDao adminDao,
+            ContributorDao contributorDao,
             NotificationRepository notificationRepository) {
         this.eventRepository = eventRepository;
-        this.adminRepository = adminRepository;
-        this.contributorRepository = contributorRepository;
+        this.adminDao = adminDao;
+        this.contributorDao = contributorDao;
         this.notificationRepository = notificationRepository;
     }
 
@@ -25,8 +25,8 @@ public class ConfirmEvent {
         var event = eventRepository.findById(eventId)
                 .orElseThrow(EventNotFoundException::new);
         var sameDayEvents = eventRepository.findAllByDate(event.getDate());
-        var admins = adminRepository.findAllByIds(event.getAdminsIds());
-        var contributors = contributorRepository.findAllByIds(event.getContributorsIds());
+        var admins = adminDao.findAllByIds(event.getAdminsIds());
+        var contributors = contributorDao.findAllByIds(event.getContributorsIds());
 
         Event confirmedEvent = confirmEvent(event, sameDayEvents, contributors);
 

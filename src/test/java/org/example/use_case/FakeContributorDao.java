@@ -5,7 +5,7 @@ import org.example.model.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FakeContributorRepository implements ContributorRepository {
+public class FakeContributorDao implements ContributorDao {
     private List<Contributor> contributors = List.of(
             new Contributor(
                     1L,
