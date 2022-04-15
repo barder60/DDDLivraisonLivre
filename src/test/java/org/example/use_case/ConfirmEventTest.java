@@ -106,4 +106,12 @@ class ConfirmEventTest {
         verify(mockNotifyRepository, times(1))
                 .notifyContributor("contri@butor.com", Role.DRIVER, expectedEvent);
     }
+
+    @Test
+    void when_event_has_not_one_conductor_should_throw_exception() {
+        // remove driver
+        fakeContributors.removeContributorById(1L);
+
+        assertThatThrownBy(() -> confirmEvent.confirm(1L)).isExactlyInstanceOf(NoDriverInEventException.class);
+    }
 }

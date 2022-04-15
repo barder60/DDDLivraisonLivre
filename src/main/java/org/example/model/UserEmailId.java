@@ -4,13 +4,10 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UserId {
-  /**
-   * id is an email
-   */
+public class UserEmailId {
   private final String id;
 
-  public UserId(String id) {
+  public UserEmailId(String id) {
     String emailRegex = "^(.+)@(.+)$";
     Matcher matcher = Pattern.compile(emailRegex).matcher(id);
 
@@ -27,8 +24,8 @@ public class UserId {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    UserId userId = (UserId) o;
-    return Objects.equals(id, userId.id);
+    UserEmailId userEmailId = (UserEmailId) o;
+    return Objects.equals(id, userEmailId.id);
   }
 
   @Override

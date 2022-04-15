@@ -28,15 +28,16 @@ public class ConfirmEvent {
         var admins = adminRepository.findAllByIds(event.getAdminsIds());
         var contributors = contributorRepository.findAllByIds(event.getContributorsIds());
 
-        Event confirmedEvent = confirmEvent(event, sameDayEvents);
+        Event confirmedEvent = confirmEvent(event, sameDayEvents, contributors);
 
-        eventRepository.save(confirmedEvent);
+        eventRepository.update(confirmedEvent);
         notifyAdminsAboutConfirmedEvent(admins, confirmedEvent);
         notifyContributorsAboutConfirmedEvent(contributors, confirmedEvent);
     }
 
-    private Event confirmEvent(Event event, List<Event> sameDayEvents) {
+    private Event confirmEvent(Event event, List<Event> sameDayEvents, List<Contributor> contributors) {
         var adminsIds = event.getAdminsIds();
+
         sameDayEvents.stream()
                 .filter(sameDayEvent -> sameDayEvent.hasAtLeastOneAdminAlreadyInEvent(adminsIds))
                 .findAny()
@@ -47,6 +48,11 @@ public class ConfirmEvent {
                 .filter(sameDayEvent -> sameDayEvent.hasAtLeastOneContributorAlreadyIn(contributorIds))
                 .findAny()
                 .orElseThrow(ContributorNotAvailableInEventException::new);
+
+        contributors.stream()
+            .filter(Contributor::isDriver)
+            .findAny()
+            .orElseThrow(NoDriverInEventException::new);
 
         return createConfirmedEvent(event);
     }
@@ -66,7 +72,7 @@ public class ConfirmEvent {
     private void notifyAdminsAboutConfirmedEvent(List<Admin> admins, Event confirmedEvent) {
         admins.forEach(admin ->
                 notificationRepository.notifyAdmin(
-                        admin.getUser().getUserId().getId(),
+                        admin.getUser().getUserEmailId().getId(),
                         confirmedEvent
                 )
         );
@@ -75,7 +81,7 @@ public class ConfirmEvent {
     private void notifyContributorsAboutConfirmedEvent(List<Contributor> contributors, Event confirmedEvent) {
         contributors.forEach(contributor ->
                 notificationRepository.notifyContributor(
-                        contributor.getUser().getUserId().getId(),
+                        contributor.getUser().getUserEmailId().getId(),
                         contributor.getRole(),
                         confirmedEvent
                 )

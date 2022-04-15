@@ -14,5 +14,5 @@ public interface EventRepository {
 
     List<Event> findAllByDate(LocalDate date);
 
-    void save(Event event);
+    void update(Event event);
 }

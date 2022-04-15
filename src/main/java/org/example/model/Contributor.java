@@ -16,6 +16,10 @@ public class Contributor {
         this.role = role;
     }
 
+    public boolean isDriver() {
+        return getRole().equals(Role.DRIVER);
+    }
+
     public Long getId() {
         return id;
     }

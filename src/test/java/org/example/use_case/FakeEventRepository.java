@@ -62,7 +62,7 @@ public class FakeEventRepository implements EventRepository {
     }
 
     @Override
-    public void save(Event event) {
+    public void update(Event event) {
         events.removeIf(currentEvent -> currentEvent.getEventId().equals(event.getEventId()));
 
         events.add(event);
