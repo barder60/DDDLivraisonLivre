@@ -66,7 +66,7 @@ public class ConfirmEvent {
     private void notifyAdminsAboutConfirmedEvent(List<Admin> admins, Event confirmedEvent) {
         admins.forEach(admin ->
                 notificationRepository.notifyAdmin(
-                        admin.getEmail(),
+                        admin.getUser().getUserId().getId(),
                         confirmedEvent
                 )
         );
@@ -75,7 +75,7 @@ public class ConfirmEvent {
     private void notifyContributorsAboutConfirmedEvent(List<Contributor> contributors, Event confirmedEvent) {
         contributors.forEach(contributor ->
                 notificationRepository.notifyContributor(
-                        contributor.getEmail(),
+                        contributor.getUser().getUserId().getId(),
                         contributor.getRole(),
                         confirmedEvent
                 )
